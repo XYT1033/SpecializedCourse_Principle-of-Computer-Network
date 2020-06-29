@@ -1,0 +1,222 @@
+//ex1
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+	 void Setxy(int a,int b);
+	 void Move(int a,int b);
+	 void Display();
+	 int Getx();
+	 int Gety();
+};
+void Point::Setxy(int a,int b)
+{x=a;y=b;}
+void Point::Move(int a,int b)
+{x=x+a;y=y+b;}
+void Point::Display()
+{cout<<x<<","<<y<<endl;}
+int Point::Getx()
+{return x;}
+int Point::Gety()
+{return y;}
+
+//ex2
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+	 void Setxy(int a,int b);
+	 void Move(int a,int b);
+	 void Display();
+	 int Getx();
+	 int Gety();
+};
+void Point::Setxy(int a,int b)
+{x=a;y=b;}
+void Point::Move(int a,int b)
+{x=x+a;y=y+b;}
+void Point::Display()
+{cout<<x<<","<<y<<endl;}
+int Point::Getx()
+{return x;}
+int Point::Gety()
+{return y;}
+
+void print(Point a)
+{a.Display();}
+void main()
+{
+	Point A,B;
+	A.Setxy(25,55);
+	B=A;
+	A.Display();
+	A.Move(-10,20);
+	print(A);
+	print(B);
+	cout<<A.Getx()<<endl;
+}
+
+//ex3
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+    void Setxy(int a,int b)
+	{x=a;y=b;}
+    void Move(int a,int b)
+	{x=x+a;y=y+b;}
+    void Display()
+	{cout<<x<<","<<y<<endl;}
+    int Getx()
+	{return x;}
+    int Gety()
+	{ return y;}
+};
+void print(Point *a)
+{a->Display();}
+void print(Point &a)
+{a.Display();}
+void main()
+{
+	Point A,B,*p;
+	Point &RA=A;
+	A.Setxy(25,55);
+	B=A;
+	p=&B;
+	p->Setxy(112,115);
+	print(p);
+	p->Display();
+	RA.Move(-80,23);
+	print(A);
+	print(&A);
+}
+
+//ex4
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+     Point();
+	 Point(int,int);
+};
+Point::Point():x(0),y(0)
+{cout<<"Initializing default"<<endl;}
+Point::Point(int a,int b):x(a),y(b)
+{cout<<"Initializing "<<a<<","<<b<<endl;}
+void main()
+{
+	Point A;
+	Point B(15,25);
+	Point C[2];
+	Point D[2]={Point(5,7),Point(8,12)};
+}
+
+//ex6
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+     Point();
+	 Point(int,int);
+};
+Point::Point():x(0),y(0)
+{cout<<"Initializing default"<<endl;}
+Point::Point(int a,int b):x(a),y(b)
+{cout<<"Initializing "<<a<<","<<b<<endl;}
+void main()
+{
+	Point *ptr1=new Point;
+	Point *ptr2=new Point(5,7);
+	delete ptr1;
+	delete ptr2;
+}
+
+//ex7
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+     Point(int=0,int=0);
+};
+Point::Point(int a,int b):x(a),y(b)
+{cout<<"Initializing "<<a<<","<<b<<endl;}
+void main()
+{
+	Point A;
+	Point B(15,25);
+	Point C[2];
+}
+
+//ex8
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+     Point(int=0,int=0);
+	 ~Point();
+};
+Point::Point(int a,int b):x(a),y(b)
+{cout<<"Initializing "<<a<<","<<b<<endl;}
+Point::~Point()
+{cout<<"Destructor is active"<<endl;}
+void main()
+{
+	Point *ptr=new Point[2];
+    delete []ptr;
+
+}
+//ex11
+#include <iostream>
+using namespace std;
+class Point{
+  private:
+     int x,y;
+  public:
+	 void Set(int a,int b)
+	{x=a;y=b;}
+    int Getx()
+	{return x;}
+    int Gety()
+	{return y;}
+};
+class Rectangle{
+	Point Loc;
+	int H,W;
+  public:
+    void Set(int x,int y,int h,int w);
+	Point * GetLoc();
+	int GetHeight(){return H;}
+	int GetWidth() {return W;}
+};
+void Rectangle::Set(int x,int y,int h,int w)
+{
+	Loc.Set(x,y);
+	H=h;W=w;
+}
+
+Point *Rectangle::GetLoc()
+{return &Loc;}
+void main()
+{
+	Rectangle rect;
+	rect.Set(10,2,25,20);
+	cout<<rect.GetHeight()<<","<<rect.GetHeight()<<",";
+	Point *p=rect.GetLoc();
+	cout<<p->Getx()<<","<<p->Gety()<<endl;
+}
+
+

@@ -1,0 +1,341 @@
+//ex1
+#include <iostream>
+#include <string>
+using namespace std;
+class str{
+  private:
+	  char *st;
+  public:
+	  str(char *s);
+	  str(str& s);
+	  str& operator=(str& a);
+	  str& operator=(char *s);
+	  void print(){cout<<st<<endl;}
+	  ~str(){delete st;}
+};
+str::str(char *s)
+{
+	st=new char[strlen(s)+1];
+	strcpy(st,s);
+}
+str::str(str& a)
+{
+	st=new char[strlen(a.st)+1];
+	strcpy(st,a.st);
+}
+str& str::operator=(str& a)
+{
+	if(this==&a) return *this;
+	delete st;
+	st=new char[strlen(a.st)+1];
+	strcpy(st,a.st);
+	return *this;
+}
+str& str::operator=(char* s)
+{
+	delete st;
+	st=new char[strlen(s)+1];
+	strcpy(st,s);
+	return *this;
+}
+void main()
+{
+	str s1("We"),s2("They"),s3(s1);
+	s1.print();s2.print();s3.print();
+	//s2=s1=s3;
+	s2.operator =((s1).operator =(s3));
+	s3="Go home!";
+	//s3=s3;
+	s3.operator=(s3);
+	s1.print();s2.print();s3.print();
+}
+//ex2
+#include <iostream.h>
+class test{
+  private:
+	  int i;
+	  float f;
+	  char ch;
+  public:
+	  test(int a=0,float b=0,char c='\0')
+	  {i=a;f=b;ch=c;}
+	  friend ostream &operator<<(ostream &,test);
+	  friend istream &operator>>(istream &,test &);
+};
+ostream &operator<<(ostream & stream,test obj)
+{
+	stream<<obj.i<<",";
+	stream<<obj.f<<",";
+	stream<<obj.ch<<endl;
+	return stream;
+}
+istream &operator>>(istream & t_stream,test& obj)
+{
+	t_stream>>obj.i;
+	t_stream>>obj.f;
+	t_stream>>obj.ch;
+	return t_stream;
+}
+void main()
+{
+	test A(45,8.5,'W');
+	operator<<(cout,A);//cout<<A;
+	test B,C;
+	cout<<"Input as i f ch:";
+	operator>>(cin,B);operator>>(cin,C);//cin>>B>>C;
+	operator<<(cout,B);operator<<(cout,C);//cout<<B<<C;
+}
+
+//ex3
+#include <iostream>
+using namespace std;
+class  number{
+  	  int num;
+  public:
+	  number(int i)
+	  {num=i;}
+	  int operator++();
+	  int operator++(int);
+	  void print()
+	  {cout<<"num="<<num<<endl;}	  
+};
+int number::operator++()
+{
+	num++;
+	return num;
+}
+int number::operator++(int)
+{
+	int i=num;
+	num++;
+	return i;
+}
+
+void main()
+{
+	number n(10);
+	int i=++n;//int i=n.operator++();
+	cout<<"i="<<i<<endl;
+	n.print();
+	i=n++;   //i=n.operator++(0);
+	cout<<"i="<<i<<endl;
+	n.print();
+}
+//ex4
+#include <iostream>
+using namespace std;
+class  number{
+  	  int num;
+  public:
+	  number(int i)
+	  {num=i;}
+	  friend int operator++(number&);
+	  friend int operator++(number&,int);
+	  void print()
+	  {cout<<"num="<<num<<endl;}	  
+};
+int operator++(number& a)
+{
+	a.num++;
+	return a.num;
+}
+int operator++(number& a,int)
+{
+	int i=a.num++;
+	return i;
+}
+
+void main()
+{
+	number n(10);
+	int i=++n;//int i=n.operator++();
+	cout<<"i="<<i<<endl;
+	n.print();
+	i=n++;   //i=n.operator++(0);
+	cout<<"i="<<i<<endl;
+	n.print();
+}
+//ex5
+#include <iostream.h>
+class  complex{
+  private:  	  
+	double real,imag;
+  public:
+	  complex(double r=0,double i=0)
+	  {real=r;imag=i;}
+	  friend complex operator+(complex,complex);
+	  void show()
+	  {cout<<real<<"+"<<imag<<"i";}	  
+};
+complex operator+(complex a,complex b)
+{
+	double r=a.real+b.real;
+	double i=a.imag+b.imag;
+	return complex(r,i);
+}
+
+void main()
+{
+	complex x(5,3),y;
+	y=x+7;
+	y=7+y;
+	y.show();
+}
+//ex6
+#include <iostream>
+#include <iomanip>
+using namespace std;
+class  iArray{
+      int _size;
+	  int *data;
+  public:
+	  iArray(int);
+	  int &operator[](int);
+	  int size() const {return _size;}
+	  ~iArray(){delete []data;}
+};
+iArray::iArray(int n)
+{
+	if(n<1){
+		cout<<"Error dimension description";
+		exit(1);
+	}
+	_size=n;
+	data=new int[_size];
+}
+int &iArray::operator [](int i){
+	if(i<0||i>_size-1){
+		cout<<"\nSubscript out of range";
+		delete[] data;
+		exit(1);
+	}
+	return data[i];
+}
+
+
+void main()
+{
+	iArray a(10);
+	cout<<"数组元素个数="<<a.size()<<endl;
+	for(int i=0;i<a.size();i++)
+		a[i]=10*(i+1);
+	for(i=0;i<a.size();i++)
+		cout<<setw(5)<<a[i];
+}
+//ex7
+#include <iostream>
+using namespace std;
+const double PI=3.141592;
+void main()
+{
+	int a=15;bool it=1,not=0;
+	cout<<showpoint<<123.0<<" "<<noshowpoint<<123.0<<" ";
+	cout<<showbase;
+	cout<<a<<" "<<uppercase<<hex<<a<<" "<<nouppercase
+		<<hex<<a<<" "<<noshowbase<<a<<dec<<a<<endl;
+	cout<<uppercase<<scientific<<PI<<" "<<nouppercase<<PI
+		<<" "<<fixed<<PI<<endl;
+	cout<<cout.precision()<<" "<<PI<<" ";
+	cout.precision(4);
+	cout<<cout.precision()<<" "<<PI<<endl;
+	cout.width(10);
+	cout<<showpos<<right<<a<<" "<<noshowpos<<PI<<" ";
+	cout<<it<<" "<<not<<" "
+		<<boolalpha<<it<<" "<<" "<<not<<" "
+		<<noboolalpha<<" "<<it<<" "<<not<<endl;
+	cout.width(10);
+	cout<<left<<PI<<" "<<123<<" "<<cout.width()<<" ";
+	cout<<123<<" "<<cout.width()<<endl;
+}
+//ex8
+#include <iostream>
+using namespace std;
+const double PI=3.141592;
+void main()
+{
+	int a=15;
+    cout.setf(ios_base::showpoint);
+	cout<<123.0<<" ";
+	cout.unsetf(ios_base::showpoint);
+	cout<<123.0<<endl;
+	cout.setf(ios_base::showbase);
+	cout.setf(ios_base::hex,ios_base::basefield);
+    cout<<a<<" "<<uppercase<<hex<<a<<" "<<nouppercase
+		<<hex<<a<<" "<<noshowbase<<a<<dec<<a<<endl;
+    float c=23.56f,d=-101.22F;
+	cout.width(20);
+	cout.setf(ios_base::scientific|ios_base::right|ios_base::showpos,ios_base::floatfield);
+	cout<<c<<"\t"<<d<<endl;
+	cout<<cout.flags()<<" "<<123.0<<" ";
+	cout.flags(513);
+	cout<<123.0<<endl;
+	cout.setf(ios_base::scientific);
+	cout<<123.0<<endl;
+	cout.width(8);
+	cout<<cout.fill('*')<<123<<endl;
+
+}
+//ex9
+#include <iostream>
+#include <fstream>
+using namespace std;
+void main()
+{
+	char ch[15],*p="abcdefg";
+	ofstream myFile;
+	myFile.open("myText.txt");
+	myFile<<p;
+	myFile<<"GoodBye!";
+	myFile.close();
+	ifstream getText("myText.txt");\
+	for(int i=0;i<strlen(p)+8;i++)
+		getText>>ch[i];
+	ch[i]='\0';
+	getText.close();
+	cout<<ch;
+}
+//ex10
+#include <iostream.h>
+#include <fstream.h>
+struct list{
+  double salary;
+  char name[20];
+  friend ostream &operator<<(ostream &os,list &ob);
+  friend istream &operator>>(istream &is,list &ob);
+};
+istream &operator>>(istream &is,list &ob)
+{
+	is>>ob.name;
+	is>>ob.salary;
+	return is;
+}
+ostream &operator<<(ostream &os,list &ob)
+{
+	os<<ob.name<<' ';
+	os<<ob.salary<<' ';
+	return os;
+}
+
+void main()
+{
+	list worker1[2]={{1256,"Liming"},{3467,"ZhangHong"}},worker2[2];
+	ofstream out("pay.txt",ios::binary);
+	if(!out){
+		cout<<"没有正确建立文件，结束程序运行！"<<endl;
+		return;
+	}
+	for(int i=0;i<2;i++)
+		out<<worker1[i];
+	out.close();
+	ifstream in("pay.txt",ios::binary);
+	if(!in){
+		cout<<"没有正确建立文件，结束程序运行！"<<endl;
+		return;
+	}
+	for(i=0;i<2;i++)
+	{
+		in>>worker2[i];
+		cout<<worker2[i]<<endl;
+	}
+	in.close();
+}

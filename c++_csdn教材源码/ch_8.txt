@@ -1,0 +1,208 @@
+//ex1
+#include <iostream>
+using namespace std;
+const double PI=3.14159;
+class Point{
+   private:
+	   double x,y;
+    public:
+		Point(double i,double j)
+		{x=i;y=j;}
+	double area()
+		 {return 0; }
+};
+class Circle:public Point{
+  private:
+	  double radius;
+  public:
+	  Circle(double a,double b,double r):Point(a,b)
+	   {radius=r;}
+	   double area()
+	   {return PI*radius*radius;}
+};
+
+void main()
+{
+	Point a(1.5,6.7);
+	Circle c(1.5,6.7,2.5);
+	cout<<"area of Point is "<<a.area()<<endl;
+	cout<<"area of Circle is "<<c.area()<<endl;
+	Point *p=&c;
+	cout<<"area of Circle of "<<p->area()<<endl;
+	Point &rc=c;
+	cout<<"area of Circle is "<<rc.area()<<endl;
+}
+//ex1
+#include <iostream>
+using namespace std;
+const double PI=3.14159;
+class Point{
+   private:
+	   double x,y;
+    public:
+		Point(double i,double j)
+		{x=i;y=j;}
+	virtual double area()
+		 {return 0; }
+};
+class Circle:public Point{
+  private:
+	  double radius;
+  public:
+	  Circle(double a,double b,double r):Point(a,b)
+	   {radius=r;}
+	   double area()
+	   {return PI*radius*radius;}
+};
+void display(Point *p){cout<<p->area()<<endl;}
+void display(Point& a){cout<<a.area()<<endl;}
+
+void main()
+{
+	Point a(1.5,6.7);
+	Circle c(1.5,6.7,2.5);
+	Point *p=&c;
+	Point &rc=c;
+	display(a);
+	display(p);	
+	display(rc);
+}
+//ex3
+#include <iostream>
+using namespace std;
+class A{
+     public:
+		 A(){}
+		 virtual void func()
+		 {cout<<"constructing A"<<endl; }
+		 ~A(){}
+		 virtual void fund()
+		 {cout<<"destrutor A"<<endl;}
+};
+class B:public A{
+   public:
+	   B(){ func();}
+	   void fun(){cout<<"come here and go...";func();}
+	   ~B()
+	   {fund();}
+};
+class C:public B{
+   public:
+	   C(){}
+	   void func(){cout<<"class C"<<endl;}
+	   ~C(){fund();}
+	   void fund(){cout<<"destructor c"<<endl;}
+};
+void main()
+{
+	C c;
+	c.fun();
+}
+//ex4
+#include <iostream>
+using namespace std;
+class shape{
+     public:
+		 virtual double area()=0;
+};
+class square:public shape{
+   protected:
+	   double H;
+   public:
+	   square(double i){H=i;}
+	   double area()
+		 {return H*H; }
+};
+class circle:public square{
+   public:
+	   circle(double r):square(r){}
+	   double area()
+		 {return H*H*3.14159; }
+};
+class triangle:public square{
+   protected:
+	   double W;
+   public:
+	   triangle(double h,double w):square(h){W=w;}
+	   double area()
+		 {return H*W*0.5; }
+};
+class rectangle:public triangle{
+   public:
+	   rectangle(double h,double w):triangle(h,w){}
+	   double area()
+		 {return H*W; }
+};
+double total(shape *s[],int n)
+{
+	double sum=0.0;
+	for(int i=0;i<n;i++)
+		sum+=s[i]->area();
+	return sum;
+}
+void main()
+{
+	shape *s[5];
+	s[0]=new square(4);
+	s[1]=new triangle(3,6);
+	s[2]=new rectangle(3,6);
+	s[3]=new square(6);
+	s[4]=new circle(10);
+	for(int i=0;i<5;i++)
+		cout<<"s["<<i<<"]="<<s[i]->area()<<endl;
+	double sum=total(s,5);
+	cout<<"the total area is:"<<sum<<endl;
+}
+
+//ex5
+#include <iostream>
+using namespace std;
+class A{
+     public:
+		 virtual void f()
+		 {cout<<"call A"<<endl; }
+};
+class B{
+   public:
+	   virtual void f()
+		 {cout<<"call B"<<endl; }
+};
+class C:public A,public B{
+   public:
+	  virtual void f()
+		 {cout<<"call C"<<endl; }
+};
+void main()
+{
+	A *pa;
+	B *pb;
+	C *pc,c;
+	pa=&c;pb=&c;pc=&c;
+	pa->f();
+	pb->f();
+	pc->f();
+}
+
+//ex6
+#include <iostream>
+using namespace std;
+class base{
+     public:
+		 virtual void print()
+		 {cout<<"In Base"<<endl; }
+};
+class derived:public base{
+   public:
+	   void print(){cout<<"In Derived"<<endl;}
+};
+void display(base *pb,void(base::*pf)())
+{(pb->*pf)();}
+void main()
+{
+	derived d;
+	base *pb=&d;
+	void(base::*pf)();
+	pf=base::print;
+	display(pb,pf);
+}
+
